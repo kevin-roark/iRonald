@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxiOS.h"
 #include "ofxiOSExtras.h"
+#include "ofxAssimpModelLoader.h"
 
 // BGG rtcmix stuff
 extern "C" {
@@ -15,7 +16,7 @@ extern "C" {
     void reset_print();
 }
 
-class ofApp : public ofxiOSApp{
+class ofApp : public ofxiOSApp {
 	
     public:
         void setup();
@@ -33,6 +34,9 @@ class ofApp : public ofxiOSApp{
         void gotFocus();
         void gotMemoryWarning();
         void deviceOrientationChanged(int newOrientation);
+    
+    // 3D model stuff
+    ofxAssimpModelLoader ronaldModel;
     
     // BGG audio stuff
     void audioRequested(float * output, int bufferSize, int nChannels);

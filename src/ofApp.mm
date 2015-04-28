@@ -11,6 +11,10 @@ void ofApp::setup(){
     
     s_audio_outbuf = (short*)malloc(nchans*framesize*sizeof(short));
     
+    // 3D stuff
+    ronaldModel.loadModel("low_poly_male.3ds");
+    ronaldModel.setScale(2, 2, 2);
+    
     // initialize RTcmix
 	rtcmixmain();
 	maxmsp_rtsetparams(sr, nchans, framesize, NULL, NULL);
@@ -53,7 +57,11 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	
+    ofBackground(0, 0, 0, 255);
+    ofSetColor(255, 255, 255, 255);
+    
+    ronaldModel.setPosition(ofGetWidth()/2, (float)ofGetHeight() * 0.5 , 0);
+    ronaldModel.drawFaces();
 }
 
 //--------------------------------------------------------------
@@ -63,7 +71,16 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
+    
+    char *score = { " \
+        grainenv = maketable(\"window\", 1000, \"hanning\") \
+        amp = 20000 \
+        ampenv = maketable(\"line\", 1000, 0,0, 5,1, 10,0) \
+    "};
+    
     char thescore[1024];
+    
+    // JCHOR(outsk, insk, dur, indur, inmaintain, pitch, nvoices, MINAMP, MAXAMP, MINWAIT, MAXWAIT, seed, inputchan, AMPENV, GRAINENV)
     
     sprintf(thescore, "carrier = %f * 1000 + 50 \
             mod = %f * 1000 + 50 \
