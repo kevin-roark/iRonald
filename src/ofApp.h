@@ -38,6 +38,13 @@ class ofApp : public ofxiOSApp {
     // 3D model stuff
     ofxAssimpModelLoader ronaldModel;
     
+    // touching
+    bool isTouchDown;
+    float lastTouchX;
+    float lastTouchY;
+    
+    float currentRotationY;
+    
     // BGG audio stuff
     void audioRequested(float * output, int bufferSize, int nChannels);
     short *s_audio_outbuf; // this is the buf filled by rtcmix (it uses short samples)

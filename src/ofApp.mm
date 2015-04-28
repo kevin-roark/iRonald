@@ -15,6 +15,12 @@ void ofApp::setup(){
     ronaldModel.loadModel("low_poly_male.3ds");
     ronaldModel.setScale(2, 2, 2);
     
+    isTouchDown = NO;
+    lastTouchX = 0;
+    lastTouchY = 0;
+    
+    currentRotationY = 0;
+    
     // initialize RTcmix
 	rtcmixmain();
 	maxmsp_rtsetparams(sr, nchans, framesize, NULL, NULL);
@@ -71,6 +77,7 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
+    isTouchDown = true;
     
     char *score = { " \
         grainenv = maketable(\"window\", 1000, \"hanning\") \
@@ -86,16 +93,29 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
             mod = %f * 1000 + 50 \
             FMINST(0, 0.5, amp*ampenv, carrier, mod, 5, 5, 0.5, wave, 1)", touch.x, touch.y);
     parse_score(thescore, strlen(thescore));
+    
+    lastTouchX = touch.x;
+    lastTouchY = touch.y;
 }
 
 //--------------------------------------------------------------
 void ofApp::touchMoved(ofTouchEventArgs & touch){
-
+    if (isTouchDown) {
+        float dx = touch.x - lastTouchX;
+        float dy = touch.y - lastTouchY;
+        
+        currentRotationY -= dx * 0.75;
+        
+        ronaldModel.setRotation(0, currentRotationY, 0, 1, 0);
+    }
+    
+    lastTouchX = touch.x;
+    lastTouchY = touch.y;
 }
 
 //--------------------------------------------------------------
 void ofApp::touchUp(ofTouchEventArgs & touch){
-
+    isTouchDown = false;
 }
 
 //--------------------------------------------------------------
