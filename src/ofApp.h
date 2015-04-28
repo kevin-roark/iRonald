@@ -35,6 +35,8 @@ class ofApp : public ofxiOSApp {
         void gotMemoryWarning();
         void deviceOrientationChanged(int newOrientation);
     
+        void parseRTInput(char *filename);
+
     // 3D model stuff
     ofxAssimpModelLoader ronaldModel;
     

@@ -28,12 +28,13 @@ void ofApp::setup(){
     ofSoundStreamSetup(nchans, 0, sr, framesize, nbufs);
     ofSoundStreamStart();
     
-    char *thescore = { " \
+    char *setupScore = { " \
+        load(\"JCHOR\") \
         wave = maketable(\"wave\", 1000, \"sine\") \
         amp = 20000 \
         ampenv = maketable(\"line\", 1000, 0,0, 5,1, 10,0) \
         "};
-    parse_score(thescore, strlen(thescore));
+    parse_score(setupScore, strlen(setupScore));
 }
 
 void ofApp::audioRequested(float * output, int bufferSize, int nChannels) {
@@ -79,20 +80,33 @@ void ofApp::exit(){
 void ofApp::touchDown(ofTouchEventArgs & touch){
     isTouchDown = true;
     
-    char *score = { " \
-        grainenv = maketable(\"window\", 1000, \"hanning\") \
-        amp = 20000 \
-        ampenv = maketable(\"line\", 1000, 0,0, 5,1, 10,0) \
-    "};
-    
-    char thescore[1024];
+    parseRTInput("ouch.aiff");
     
     // JCHOR(outsk, insk, dur, indur, inmaintain, pitch, nvoices, MINAMP, MAXAMP, MINWAIT, MAXWAIT, seed, inputchan, AMPENV, GRAINENV)
-    
-    sprintf(thescore, "carrier = %f * 1000 + 50 \
-            mod = %f * 1000 + 50 \
-            FMINST(0, 0.5, amp*ampenv, carrier, mod, 5, 5, 0.5, wave, 1)", touch.x, touch.y);
-    parse_score(thescore, strlen(thescore));
+    char *score = { "\
+        inchan = 0 \
+        inskip = 0.0 \
+        \
+        outdur = 2 \
+        \
+        indur = 0.4 \
+        maintain_dur = 1 \
+        transposition = 0.07 \
+        nvoices = 5 \
+        minamp = 0.01 \
+        maxamp = 1.0 \
+        minwait = 0.00 \
+        maxwait = 0.30 \
+        seed = 0.9371 \
+        \
+        amp = 0.5 \
+        env = maketable(\"line\", 1000, 0,0, 1,1, outdur-1,1, outdur,0) \
+        \
+        grainenv = maketable(\"window\", 1000, \"hanning\") \
+        \
+        JCHOR(0, inskip, outdur, indur, maintain_dur, transposition, nvoices, minamp, maxamp, minwait, maxwait, seed, inchan, amp * env, grainenv) \
+    "};
+    parse_score(score, strlen(score));
     
     lastTouchX = touch.x;
     lastTouchY = touch.y;
@@ -102,7 +116,6 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
 void ofApp::touchMoved(ofTouchEventArgs & touch){
     if (isTouchDown) {
         float dx = touch.x - lastTouchX;
-        float dy = touch.y - lastTouchY;
         
         currentRotationY -= dx * 0.75;
         
@@ -146,5 +159,14 @@ void ofApp::gotMemoryWarning(){
 //--------------------------------------------------------------
 void ofApp::deviceOrientationChanged(int newOrientation){
 
+}
+
+
+/// kev's helpers
+
+void ofApp::parseRTInput(char *filename) {
+    char rtinputScore[1024];
+    sprintf(rtinputScore, "rtinput(\"%s%s\")", ofToDataPath("").c_str(), filename);
+    parse_score(rtinputScore, strlen(rtinputScore));
 }
 

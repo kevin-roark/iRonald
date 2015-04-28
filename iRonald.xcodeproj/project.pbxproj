@@ -42,6 +42,7 @@
 		FBDCE80A1AF038F700984976 /* aiMatrix4x4.inl in Resources */ = {isa = PBXBuildFile; fileRef = FBDCE7DE1AF038F700984976 /* aiMatrix4x4.inl */; };
 		FBDCE80B1AF038F700984976 /* aiVector3D.inl in Resources */ = {isa = PBXBuildFile; fileRef = FBDCE7E71AF038F700984976 /* aiVector3D.inl */; };
 		FBDCE80E1AF038F700984976 /* assimp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBDCE7FC1AF038F700984976 /* assimp.a */; };
+		FBDCE8181AF041DE00984976 /* ouch.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FBDCE8171AF041DE00984976 /* ouch.aiff */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +138,7 @@
 		FBDCE7F31AF038F700984976 /* NullLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NullLogger.h; sourceTree = "<group>"; };
 		FBDCE7F41AF038F700984976 /* ProgressHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressHandler.h; sourceTree = "<group>"; };
 		FBDCE7FC1AF038F700984976 /* assimp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = assimp.a; sourceTree = "<group>"; };
+		FBDCE8171AF041DE00984976 /* ouch.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ouch.aiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,7 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				FBDCE7BE1AF0385100984976 /* frameworks */,
-				FB0CD3621AEDA457005E554B /* models */,
+				FB0CD3621AEDA457005E554B /* assets */,
 				E4D8936B11527B74007E1F53 /* main.mm */,
 				E4D8936D11527B74007E1F53 /* ofApp.mm */,
 				E4D8936C11527B74007E1F53 /* ofApp.h */,
@@ -266,12 +268,13 @@
 			path = src;
 			sourceTree = SOURCE_ROOT;
 		};
-		FB0CD3621AEDA457005E554B /* models */ = {
+		FB0CD3621AEDA457005E554B /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				FBDCE8171AF041DE00984976 /* ouch.aiff */,
 				FB0CD3631AEDA466005E554B /* low_poly_male.3ds */,
 			);
-			name = models;
+			name = assets;
 			path = ..;
 			sourceTree = "<group>";
 		};
@@ -463,6 +466,7 @@
 				678E130A17951536005B6D19 /* Icon.png in Resources */,
 				FB0CD3641AEDA466005E554B /* low_poly_male.3ds in Resources */,
 				678E130C1795153C005B6D19 /* Default.png in Resources */,
+				FBDCE8181AF041DE00984976 /* ouch.aiff in Resources */,
 				678E130E17951540005B6D19 /* Default@2x.png in Resources */,
 				FBDCE8091AF038F700984976 /* aiMatrix3x3.inl in Resources */,
 				FBDCE8071AF038F700984976 /* aiColor4D.inl in Resources */,
