@@ -13,13 +13,16 @@ void ofApp::setup(){
     
     // 3D stuff
     ronaldModel.loadModel("low_poly_male.3ds");
-    ronaldModel.setScale(2, 2, 2);
     
     isTouchDown = NO;
     lastTouchX = 0;
     lastTouchY = 0;
     
     currentRotationY = 0;
+    
+    currentTouchesDown = 0;
+    currentGB = 255;
+    currentScale = 2;
     
     // initialize RTcmix
 	rtcmixmain();
@@ -59,14 +62,18 @@ void ofApp::audioRequested(float * output, int bufferSize, int nChannels) {
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    if (!isTouchDown && currentTouchesDown > 0) {
+        currentTouchesDown = currentTouchesDown - 1;
+        updateRonaldAppearance();
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(0, 0, 0, 255);
-    ofSetColor(255, 255, 255, 255);
+    ofSetColor(255, currentGB, currentGB, 255);
     
+    ronaldModel.setScale(currentScale, currentScale, currentScale);
     ronaldModel.setPosition(ofGetWidth()/2, (float)ofGetHeight() * 0.5 , 0);
     ronaldModel.drawFaces();
 }
@@ -118,8 +125,17 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         float dx = touch.x - lastTouchX;
         
         currentRotationY -= dx * 0.75;
+        if (currentRotationY < -90) {
+            currentRotationY = -90;
+        }
+        else if (currentRotationY > 90) {
+            currentRotationY = 90;
+        }
         
         ronaldModel.setRotation(0, currentRotationY, 0, 1, 0);
+        
+        currentTouchesDown = MIN(currentTouchesDown + 1, 255);
+        updateRonaldAppearance();
     }
     
     lastTouchX = touch.x;
@@ -163,6 +179,12 @@ void ofApp::deviceOrientationChanged(int newOrientation){
 
 
 /// kev's helpers
+
+void ofApp::updateRonaldAppearance() {
+    currentGB = 255 - currentTouchesDown;
+    
+    currentScale = ((currentTouchesDown / 255.0f) * 2) + 2;
+}
 
 void ofApp::parseRTInput(char *filename) {
     char rtinputScore[1024];

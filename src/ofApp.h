@@ -36,6 +36,7 @@ class ofApp : public ofxiOSApp {
         void deviceOrientationChanged(int newOrientation);
     
         void parseRTInput(char *filename);
+        void updateRonaldAppearance();
 
     // 3D model stuff
     ofxAssimpModelLoader ronaldModel;
@@ -46,6 +47,10 @@ class ofApp : public ofxiOSApp {
     float lastTouchY;
     
     float currentRotationY;
+    
+    int currentTouchesDown;
+    int currentGB;
+    float currentScale;
     
     // BGG audio stuff
     void audioRequested(float * output, int bufferSize, int nChannels);
