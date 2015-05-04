@@ -1,5 +1,11 @@
 #include "ofApp.h"
 
+const int MAX_TOUCH_COUNT = 375;
+
+double rfloat() {
+    return ((double)arc4random() / 0x100000000);
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     // BGG audio stuff
@@ -27,7 +33,7 @@ void ofApp::setup(){
     yBodyOffset = 0;
 
     frameCount = 0;
-    lastChoralFrame = 0;
+    lastChoralFrame = -100;
     
     // initialize RTcmix
 	rtcmixmain();
@@ -81,24 +87,19 @@ void ofApp::draw(){
     ofSetColor(255, currentGB, currentGB, 255);
     
     if (isTouchDown) {
-        double rand = ((double)arc4random() / 0x100000000);
-        printf("rand: %f\n", rand);
-        xBodyOffset += (0.5 - rand) * 3;
+        xBodyOffset += (0.5 - rfloat()) * 3;
         if (xBodyOffset < -40) {
             xBodyOffset = -40;
         } else if (xBodyOffset > 40) {
             xBodyOffset = 40;
         }
         
-        rand = ((double)arc4random() / 0x100000000);
-        yBodyOffset += (0.5 - rand) * 3;
+        yBodyOffset += (0.5 - rfloat()) * 3;
         if (yBodyOffset < -40) {
             yBodyOffset = -40;
         } else if (yBodyOffset > 40) {
             yBodyOffset = 40;
         }
-        
-        printf("%f %f\n", xBodyOffset, yBodyOffset);
     }
     
     ronaldModel.setScale(currentScale, currentScale, currentScale);
@@ -134,7 +135,7 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         
         ronaldModel.setRotation(0, currentRotationY, 0, 1, 0);
         
-        currentTouchesDown = MIN(currentTouchesDown + 1, 255);
+        currentTouchesDown = MIN(currentTouchesDown + 1, MAX_TOUCH_COUNT);
         updateRonaldAppearance();
     }
     
@@ -181,16 +182,33 @@ void ofApp::deviceOrientationChanged(int newOrientation){
 /// kev's helpers
 
 void ofApp::updateRonaldAppearance() {
-    float percent = (currentTouchesDown / 255.0f);
+    float percent = (currentTouchesDown / (float)MAX_TOUCH_COUNT);
     
-    currentGB = 255 - currentTouchesDown;
+    currentGB =  (1 - percent) * 255;
     
-    currentScale = (percent * 2) + 2;
+    currentScale = (percent * 3) + 2;
     
-    if (frameCount - lastChoralFrame > 60) {
-        int nvoices = 1 + (percent * 45);
-        printf("doing it with voices %d\n", nvoices);
-        doChorus("ouch.aiff", nvoices);
+    if (frameCount - lastChoralFrame > 90) {
+        int nvoices = 1 + (percent * 60);
+        float dur = 2 + (percent * 4 * max(0.25, rfloat()));
+        float amp = 0.35 + (percent * 0.275);
+        
+        float trans = 0;
+        float p = rfloat();
+        if (p < 0.2) {
+            trans = rfloat() * -0.3 - 0.05;
+        } else if (p < 0.4) {
+            trans = rfloat() * 0.3 + 0.05;
+        } else if (p < 0.6) {
+            trans = rfloat() * -0.12 - 0.01;
+        } else if (p < 0.8) {
+            trans = rfloat() * 0.12 + 0.01;
+        } else {
+            trans = rfloat() * 0.05;
+        }
+        
+        printf("doing it with voices %d dur %f trans %f amp %f\n", nvoices, dur, trans, amp);
+        doChorus("ouch.aiff", nvoices, dur, trans, amp);
         lastChoralFrame = frameCount;
     }
 }
@@ -201,18 +219,18 @@ void ofApp::parseRTInput(char *filename) {
     parse_score(rtinputScore, strlen(rtinputScore));
 }
 
-void ofApp::doChorus(char *samplename, int nvoices) {
+void ofApp::doChorus(char *samplename, int nvoices, float outdur, float trans, float amp) {
     
     // JCHOR(outsk, insk, dur, indur, inmaintain, pitch, nvoices, MINAMP, MAXAMP, MINWAIT, MAXWAIT, seed, inputchan, AMPENV, GRAINENV)
     char *scoreTemplate = { "\
         inchan = 0 \
         inskip = 0.0 \
         \
-        outdur = 2 \
+        outdur = %.2f \
         \
         indur = 0.4 \
         maintain_dur = 1 \
-        transposition = 0.07 \
+        transposition = %.3f \
         nvoices = %d \
         minamp = 0.01 \
         maxamp = 1.0 \
@@ -220,7 +238,7 @@ void ofApp::doChorus(char *samplename, int nvoices) {
         maxwait = 0.30 \
         seed = 0.9371 \
         \
-        amp = 0.5 \
+        amp = %.3f \
         env = maketable(\"line\", 1000, 0,0, 1,1, outdur-1,1, outdur,0) \
         \
         grainenv = maketable(\"window\", 1000, \"hanning\") \
@@ -230,9 +248,8 @@ void ofApp::doChorus(char *samplename, int nvoices) {
     
     parseRTInput(samplename);
     
-    char score[2048];
-    sprintf(score, scoreTemplate, nvoices);
+    char score[4096];
+    sprintf(score, scoreTemplate, outdur, trans, nvoices, amp);
     
     parse_score(score, strlen(score));
 }
-
