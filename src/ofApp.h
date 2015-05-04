@@ -35,8 +35,10 @@ class ofApp : public ofxiOSApp {
         void gotMemoryWarning();
         void deviceOrientationChanged(int newOrientation);
     
-        void parseRTInput(char *filename);
         void updateRonaldAppearance();
+    
+        void parseRTInput(char *filename);
+        void doChorus(char *samplename, int nvoices);
 
     // 3D model stuff
     ofxAssimpModelLoader ronaldModel;
@@ -51,6 +53,11 @@ class ofApp : public ofxiOSApp {
     int currentTouchesDown;
     int currentGB;
     float currentScale;
+    float xBodyOffset;
+    float yBodyOffset;
+
+    unsigned long frameCount;
+    unsigned long lastChoralFrame;
     
     // BGG audio stuff
     void audioRequested(float * output, int bufferSize, int nChannels);
