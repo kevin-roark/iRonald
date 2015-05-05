@@ -37,6 +37,7 @@
 		FB3EEF451AF84415006A228D /* haha.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FB3EEF401AF84414006A228D /* haha.aiff */; };
 		FB3EEF461AF84415006A228D /* i_ronald.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FB3EEF411AF84414006A228D /* i_ronald.aiff */; };
 		FB3EEF471AF84415006A228D /* stop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FB3EEF421AF84414006A228D /* stop.aiff */; };
+		FB9C5EDB1AF88C9F004CB37E /* guitar.png in Resources */ = {isa = PBXBuildFile; fileRef = FB9C5EDA1AF88C9F004CB37E /* guitar.png */; };
 		FBDCE7CA1AF038C400984976 /* ofxAssimpAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBDCE7C11AF038C400984976 /* ofxAssimpAnimation.cpp */; };
 		FBDCE7CB1AF038C400984976 /* ofxAssimpMeshHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBDCE7C31AF038C400984976 /* ofxAssimpMeshHelper.cpp */; };
 		FBDCE7CC1AF038C400984976 /* ofxAssimpModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBDCE7C51AF038C400984976 /* ofxAssimpModelLoader.cpp */; };
@@ -102,6 +103,7 @@
 		FB3EEF401AF84414006A228D /* haha.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = haha.aiff; sourceTree = "<group>"; };
 		FB3EEF411AF84414006A228D /* i_ronald.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = i_ronald.aiff; sourceTree = "<group>"; };
 		FB3EEF421AF84414006A228D /* stop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = stop.aiff; sourceTree = "<group>"; };
+		FB9C5EDA1AF88C9F004CB37E /* guitar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guitar.png; sourceTree = "<group>"; };
 		FBDCE7C11AF038C400984976 /* ofxAssimpAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAssimpAnimation.cpp; sourceTree = "<group>"; };
 		FBDCE7C21AF038C400984976 /* ofxAssimpAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAssimpAnimation.h; sourceTree = "<group>"; };
 		FBDCE7C31AF038C400984976 /* ofxAssimpMeshHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAssimpMeshHelper.cpp; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 		FB0CD3621AEDA457005E554B /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				FB9C5EDA1AF88C9F004CB37E /* guitar.png */,
 				FB3EEF3E1AF84414006A228D /* dont_touch.aiff */,
 				FB3EEF3F1AF84414006A228D /* eeee.aiff */,
 				FB3EEF401AF84414006A228D /* haha.aiff */,
@@ -478,6 +481,7 @@
 				FBDCE80B1AF038F700984976 /* aiVector3D.inl in Resources */,
 				E41D3EE613B3906D00A75A5D /* CoreOF.xcconfig in Resources */,
 				678E130817951530005B6D19 /* Icon@2x.png in Resources */,
+				FB9C5EDB1AF88C9F004CB37E /* guitar.png in Resources */,
 				FB3EEF461AF84415006A228D /* i_ronald.aiff in Resources */,
 				FB3EEF471AF84415006A228D /* stop.aiff in Resources */,
 				FBDCE80A1AF038F700984976 /* aiMatrix4x4.inl in Resources */,

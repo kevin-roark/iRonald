@@ -65,6 +65,8 @@ class ofApp : public ofxiOSApp {
     bool guitarMode;
     unsigned long stopDancingFrame;
     
+    ofImage guitarImage;
+    
     // BGG audio stuff
     void audioRequested(float * output, int bufferSize, int nChannels);
     short *s_audio_outbuf; // this is the buf filled by rtcmix (it uses short samples)

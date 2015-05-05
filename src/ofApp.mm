@@ -135,6 +135,14 @@ void ofApp::draw(){
         ofSetColor(60, 255, 60, 255);
     }
     ofRect(boxRect.origin.x, boxRect.origin.y, boxRect.size.width, boxRect.size.height);
+    
+    if (guitarMode) {
+        if(!guitarImage.isAllocated()) {
+            guitarImage.loadImage("guitar.png");
+        } else {
+            guitarImage.draw(ofGetWidth() / 2 - 100 + xBodyOffset, ofGetHeight() / 2 - 75 + yBodyOffset, 200, 150);
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -155,7 +163,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
     
     if (guitarMode) {
         strum(touch.x, touch.y);
-        stopDancingFrame = frameCount + 120;
+        stopDancingFrame = frameCount + 180;
     }
 }
 
