@@ -177,7 +177,7 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         currentTouchesDown = MIN(currentTouchesDown + 1, MAX_TOUCH_COUNT);
         updateRonaldAppearance();
         
-        if (!guitarMode && frameCount - lastChoralFrame > 70) {
+        if (!guitarMode && frameCount - lastChoralFrame > 52) {
             oinkChorus(touch.x, touch.y);
             lastChoralFrame = frameCount;
         }
