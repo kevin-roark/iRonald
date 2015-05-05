@@ -32,6 +32,11 @@
 		E4D8936E11527B74007E1F53 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = E4D8936B11527B74007E1F53 /* main.mm */; };
 		E4D8936F11527B74007E1F53 /* ofApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = E4D8936D11527B74007E1F53 /* ofApp.mm */; };
 		FB0CD3641AEDA466005E554B /* low_poly_male.3ds in Resources */ = {isa = PBXBuildFile; fileRef = FB0CD3631AEDA466005E554B /* low_poly_male.3ds */; };
+		FB3EEF431AF84414006A228D /* dont_touch.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FB3EEF3E1AF84414006A228D /* dont_touch.aiff */; };
+		FB3EEF441AF84415006A228D /* eeee.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FB3EEF3F1AF84414006A228D /* eeee.aiff */; };
+		FB3EEF451AF84415006A228D /* haha.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FB3EEF401AF84414006A228D /* haha.aiff */; };
+		FB3EEF461AF84415006A228D /* i_ronald.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FB3EEF411AF84414006A228D /* i_ronald.aiff */; };
+		FB3EEF471AF84415006A228D /* stop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = FB3EEF421AF84414006A228D /* stop.aiff */; };
 		FBDCE7CA1AF038C400984976 /* ofxAssimpAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBDCE7C11AF038C400984976 /* ofxAssimpAnimation.cpp */; };
 		FBDCE7CB1AF038C400984976 /* ofxAssimpMeshHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBDCE7C31AF038C400984976 /* ofxAssimpMeshHelper.cpp */; };
 		FBDCE7CC1AF038C400984976 /* ofxAssimpModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBDCE7C51AF038C400984976 /* ofxAssimpModelLoader.cpp */; };
@@ -92,6 +97,11 @@
 		E4D8936C11527B74007E1F53 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
 		E4D8936D11527B74007E1F53 /* ofApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ofApp.mm; path = src/ofApp.mm; sourceTree = SOURCE_ROOT; };
 		FB0CD3631AEDA466005E554B /* low_poly_male.3ds */ = {isa = PBXFileReference; lastKnownFileType = file; path = low_poly_male.3ds; sourceTree = "<group>"; };
+		FB3EEF3E1AF84414006A228D /* dont_touch.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = dont_touch.aiff; sourceTree = "<group>"; };
+		FB3EEF3F1AF84414006A228D /* eeee.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = eeee.aiff; sourceTree = "<group>"; };
+		FB3EEF401AF84414006A228D /* haha.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = haha.aiff; sourceTree = "<group>"; };
+		FB3EEF411AF84414006A228D /* i_ronald.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = i_ronald.aiff; sourceTree = "<group>"; };
+		FB3EEF421AF84414006A228D /* stop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = stop.aiff; sourceTree = "<group>"; };
 		FBDCE7C11AF038C400984976 /* ofxAssimpAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAssimpAnimation.cpp; sourceTree = "<group>"; };
 		FBDCE7C21AF038C400984976 /* ofxAssimpAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAssimpAnimation.h; sourceTree = "<group>"; };
 		FBDCE7C31AF038C400984976 /* ofxAssimpMeshHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAssimpMeshHelper.cpp; sourceTree = "<group>"; };
@@ -271,6 +281,11 @@
 		FB0CD3621AEDA457005E554B /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				FB3EEF3E1AF84414006A228D /* dont_touch.aiff */,
+				FB3EEF3F1AF84414006A228D /* eeee.aiff */,
+				FB3EEF401AF84414006A228D /* haha.aiff */,
+				FB3EEF411AF84414006A228D /* i_ronald.aiff */,
+				FB3EEF421AF84414006A228D /* stop.aiff */,
 				FBDCE8171AF041DE00984976 /* ouch.aiff */,
 				FB0CD3631AEDA466005E554B /* low_poly_male.3ds */,
 			);
@@ -459,15 +474,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				E41D3ED713B38FB500A75A5D /* Project.xcconfig in Resources */,
+				FB3EEF441AF84415006A228D /* eeee.aiff in Resources */,
 				FBDCE80B1AF038F700984976 /* aiVector3D.inl in Resources */,
 				E41D3EE613B3906D00A75A5D /* CoreOF.xcconfig in Resources */,
 				678E130817951530005B6D19 /* Icon@2x.png in Resources */,
+				FB3EEF461AF84415006A228D /* i_ronald.aiff in Resources */,
+				FB3EEF471AF84415006A228D /* stop.aiff in Resources */,
 				FBDCE80A1AF038F700984976 /* aiMatrix4x4.inl in Resources */,
 				678E130A17951536005B6D19 /* Icon.png in Resources */,
 				FB0CD3641AEDA466005E554B /* low_poly_male.3ds in Resources */,
 				678E130C1795153C005B6D19 /* Default.png in Resources */,
 				FBDCE8181AF041DE00984976 /* ouch.aiff in Resources */,
 				678E130E17951540005B6D19 /* Default@2x.png in Resources */,
+				FB3EEF431AF84414006A228D /* dont_touch.aiff in Resources */,
+				FB3EEF451AF84415006A228D /* haha.aiff in Resources */,
 				FBDCE8091AF038F700984976 /* aiMatrix3x3.inl in Resources */,
 				FBDCE8071AF038F700984976 /* aiColor4D.inl in Resources */,
 				FBDCE8081AF038F700984976 /* aiMaterial.inl in Resources */,

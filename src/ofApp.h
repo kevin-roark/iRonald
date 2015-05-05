@@ -37,8 +37,9 @@ class ofApp : public ofxiOSApp {
     
         void updateRonaldAppearance();
     
+        void oinkChorus(int touchX, int touchY);
         void parseRTInput(char *filename);
-        void doChorus(char *samplename, int nvoices, float outdur, float trans, float amp);
+        void doChorus(char *samplename, float indur, int nvoices, float outdur, float trans, float amp);
 
     // 3D model stuff
     ofxAssimpModelLoader ronaldModel;

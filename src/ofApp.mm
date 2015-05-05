@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-const int MAX_TOUCH_COUNT = 375;
+const int MAX_TOUCH_COUNT = 500;
 
 double rfloat() {
     return ((double)arc4random() / 0x100000000);
@@ -8,6 +8,8 @@ double rfloat() {
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    printf("window size %d %d\n", ofGetWidth(), ofGetHeight());
+    
     // BGG audio stuff
     int sr = 44100;
     int nbufs = 2; // you can use more for more processing but latency will suffer
@@ -74,7 +76,7 @@ void ofApp::audioRequested(float * output, int bufferSize, int nChannels) {
 //--------------------------------------------------------------
 void ofApp::update(){
     if (!isTouchDown && currentTouchesDown > 0) {
-        currentTouchesDown = currentTouchesDown - 1;
+        currentTouchesDown = MAX(0, currentTouchesDown - 3);
         updateRonaldAppearance();
     }
     
@@ -137,6 +139,12 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         
         currentTouchesDown = MIN(currentTouchesDown + 1, MAX_TOUCH_COUNT);
         updateRonaldAppearance();
+        
+        
+        if (frameCount - lastChoralFrame > 70) {
+            oinkChorus(touch.x, touch.y);
+            lastChoralFrame = frameCount;
+        }
     }
     
     lastTouchX = touch.x;
@@ -183,33 +191,62 @@ void ofApp::deviceOrientationChanged(int newOrientation){
 
 void ofApp::updateRonaldAppearance() {
     float percent = (currentTouchesDown / (float)MAX_TOUCH_COUNT);
-    
+
     currentGB =  (1 - percent) * 255;
     
-    currentScale = (percent * 3) + 2;
+    currentScale = (percent * 4) + 2;
+}
+
+void ofApp::oinkChorus(int touchX, int touchY) {
+    float percent = (currentTouchesDown / (float)MAX_TOUCH_COUNT);
     
-    if (frameCount - lastChoralFrame > 90) {
-        int nvoices = 1 + (percent * 60);
-        float dur = 2 + (percent * 4 * max(0.25, rfloat()));
-        float amp = 0.35 + (percent * 0.275);
-        
-        float trans = 0;
-        float p = rfloat();
-        if (p < 0.2) {
-            trans = rfloat() * -0.3 - 0.05;
-        } else if (p < 0.4) {
-            trans = rfloat() * 0.3 + 0.05;
-        } else if (p < 0.6) {
-            trans = rfloat() * -0.12 - 0.01;
-        } else if (p < 0.8) {
-            trans = rfloat() * 0.12 + 0.01;
-        } else {
-            trans = rfloat() * 0.05;
+    int nvoices = 1 + (percent * 50);
+    float dur = 2 + (percent * 3.5);
+    float amp = 0.4 + (percent * 0.21);
+    
+    float trans = 0;
+    float p = rfloat();
+    if (p < 0.2) {
+        trans = rfloat() * -0.3 - 0.05;
+    } else if (p < 0.4) {
+        trans = rfloat() * 0.3 + 0.05;
+    } else if (p < 0.6) {
+        trans = rfloat() * -0.12 - 0.01;
+    } else if (p < 0.8) {
+        trans = rfloat() * 0.12 + 0.01;
+    } else {
+        trans = rfloat() * 0.05;
+    }
+    
+    printf("doing it with voices %d dur %f trans %f amp %f\n", nvoices, dur, trans, amp);
+    
+    if (touchY < 0.29 * ofGetHeight()) {
+        printf("head\n");
+        doChorus("i_ronald.aiff", 0.68, nvoices, dur, trans, amp);
+    }
+    else if (touchY < 0.56 * ofGetHeight()) {
+        if (touchX < ofGetWidth() / 3) {
+            printf("left arm\n");
+            doChorus("eeee.aiff", 0.62, nvoices, dur, trans, amp);
         }
-        
-        printf("doing it with voices %d dur %f trans %f amp %f\n", nvoices, dur, trans, amp);
-        doChorus("ouch.aiff", nvoices, dur, trans, amp);
-        lastChoralFrame = frameCount;
+        else if (touchX > ofGetWidth() * 0.67) {
+            printf("right arm\n");
+            doChorus("dont_touch.aiff", 1.1, nvoices, dur, trans, amp);
+        }
+        else {
+            printf("tummy\n");
+            doChorus("ouch.aiff", 0.4, nvoices, dur, trans, amp);
+        }
+    }
+    else {
+        if (touchX < ofGetWidth() / 2) {
+            printf("left leg\n");
+            doChorus("haha.aiff", 0.64, nvoices, dur, trans, amp);
+        }
+        else {
+            printf("right leg\n");
+            doChorus("stop.aiff", 0.8, nvoices, dur, trans, amp);
+        }
     }
 }
 
@@ -219,7 +256,7 @@ void ofApp::parseRTInput(char *filename) {
     parse_score(rtinputScore, strlen(rtinputScore));
 }
 
-void ofApp::doChorus(char *samplename, int nvoices, float outdur, float trans, float amp) {
+void ofApp::doChorus(char *samplename, float indur, int nvoices, float outdur, float trans, float amp) {
     
     // JCHOR(outsk, insk, dur, indur, inmaintain, pitch, nvoices, MINAMP, MAXAMP, MINWAIT, MAXWAIT, seed, inputchan, AMPENV, GRAINENV)
     char *scoreTemplate = { "\
@@ -228,7 +265,7 @@ void ofApp::doChorus(char *samplename, int nvoices, float outdur, float trans, f
         \
         outdur = %.2f \
         \
-        indur = 0.4 \
+        indur = %.2f \
         maintain_dur = 1 \
         transposition = %.3f \
         nvoices = %d \
@@ -249,7 +286,7 @@ void ofApp::doChorus(char *samplename, int nvoices, float outdur, float trans, f
     parseRTInput(samplename);
     
     char score[4096];
-    sprintf(score, scoreTemplate, outdur, trans, nvoices, amp);
+    sprintf(score, scoreTemplate,outdur, indur, trans, nvoices, amp);
     
     parse_score(score, strlen(score));
 }
