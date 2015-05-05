@@ -6,6 +6,8 @@ double rfloat() {
     return ((double)arc4random() / 0x100000000);
 }
 
+CGRect boxRect = CGRectMake(0, 0, 20, 20);
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     printf("window size %d %d\n", ofGetWidth(), ofGetHeight());
@@ -37,6 +39,9 @@ void ofApp::setup(){
     frameCount = 0;
     lastChoralFrame = -100;
     
+    guitarMode = false;
+    stopDancingFrame = 0;
+    
     // initialize RTcmix
 	rtcmixmain();
 	maxmsp_rtsetparams(sr, nchans, framesize, NULL, NULL);
@@ -46,6 +51,7 @@ void ofApp::setup(){
     
     char *setupScore = { " \
         load(\"JCHOR\") \
+        load(\"STRUM\") \
         wave = maketable(\"wave\", 1000, \"sine\") \
         amp = 20000 \
         ampenv = maketable(\"line\", 1000, 0,0, 5,1, 10,0) \
@@ -88,7 +94,7 @@ void ofApp::draw(){
     ofBackground(195, 195, 195, 255);
     ofSetColor(255, currentGB, currentGB, 255);
     
-    if (isTouchDown) {
+    if (!guitarMode && isTouchDown) {
         xBodyOffset += (0.5 - rfloat()) * 3;
         if (xBodyOffset < -40) {
             xBodyOffset = -40;
@@ -103,10 +109,32 @@ void ofApp::draw(){
             yBodyOffset = 40;
         }
     }
+    else if (guitarMode && frameCount <= stopDancingFrame) {
+        xBodyOffset += (0.5 - rfloat()) * 8;
+        if (xBodyOffset < -70) {
+            xBodyOffset = -70;
+        } else if (xBodyOffset > 70) {
+            xBodyOffset = 70;
+        }
+        
+        yBodyOffset += (0.5 - rfloat()) * 8;
+        if (yBodyOffset < -70) {
+            yBodyOffset = -70;
+        } else if (yBodyOffset > 70) {
+            yBodyOffset = 70;
+        }
+    }
     
     ronaldModel.setScale(currentScale, currentScale, currentScale);
     ronaldModel.setPosition(ofGetWidth()/2 + xBodyOffset, (float)ofGetHeight() * 0.5 + yBodyOffset, 0);
     ronaldModel.drawFaces();
+    
+    if (guitarMode) {
+        ofSetColor(60, 60, 255, 255);
+    } else {
+        ofSetColor(60, 255, 60, 255);
+    }
+    ofRect(boxRect.origin.x, boxRect.origin.y, boxRect.size.width, boxRect.size.height);
 }
 
 //--------------------------------------------------------------
@@ -116,10 +144,19 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
-    isTouchDown = true;
+    if (touch.x >= boxRect.origin.x && touch.x <= boxRect.origin.x + boxRect.size.width && touch.y >= boxRect.origin.y && touch.y <= boxRect.origin.y + boxRect.size.height) {
+        guitarMode = !guitarMode;
+        return;
+    }
     
+    isTouchDown = true;
     lastTouchX = touch.x;
     lastTouchY = touch.y;
+    
+    if (guitarMode) {
+        strum(touch.x, touch.y);
+        stopDancingFrame = frameCount + 120;
+    }
 }
 
 //--------------------------------------------------------------
@@ -140,8 +177,7 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         currentTouchesDown = MIN(currentTouchesDown + 1, MAX_TOUCH_COUNT);
         updateRonaldAppearance();
         
-        
-        if (frameCount - lastChoralFrame > 70) {
+        if (!guitarMode && frameCount - lastChoralFrame > 70) {
             oinkChorus(touch.x, touch.y);
             lastChoralFrame = frameCount;
         }
@@ -155,9 +191,11 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
 void ofApp::touchUp(ofTouchEventArgs & touch){
     isTouchDown = false;
     
-    float percent = (currentTouchesDown / (float)MAX_TOUCH_COUNT);
-    float dur = percent * 12 + 5;
-    addGVerb(dur);
+    if (!guitarMode) {
+        float percent = (currentTouchesDown / (float)MAX_TOUCH_COUNT);
+        float dur = percent * 12 + 5;
+        addGVerb(dur);
+    }
 }
 
 //--------------------------------------------------------------
@@ -297,10 +335,34 @@ void ofApp::doChorus(char *samplename, float indur, int nvoices, float outdur, f
 
 void ofApp::addGVerb(float dur) {
     // GVERB(outsk, insk, dur, AMP, ROOMSIZE, RVBTIME, DAMPING, BANDWIDTH, DRYLEVEL, EARLYREFLECT, RVBTAIL, RINGDOWN[, INCHAN])
-    char *scoreTemplate = "GVERB(0, 0, %f, 0.5, 150.0, 10.0, 0.71, 0.34, -10.0, -11.0, -9.0, 7.0)";
+    char *scoreTemplate = "GVERB(0, 0, %f, 0.75, 150.0, 10.0, 0.71, 0.34, -10.0, -11.0, -9.0, 7.0)";
     
     char score[1024];
     sprintf(score, scoreTemplate, dur);
     
+    parse_score(score, strlen(score));
+}
+
+void ofApp::strum(int x, int y) {
+    int numNotes = max(1, min(15, (x + y) / 60));
+    float noteDur = 1.8 - (numNotes / 15.0f * 1.6);
+    float compression = 0.15;
+    float pitch = 2.5 + ((float) x / ofGetWidth()) * 5.5;
+    float distortionPitch = 6.5 + ((float) y / ofGetHeight()) * 1;
+    
+    // START1(outsk, dur, pitch, funddecay, nyqdecay, distortiongain, feedbackgain, feedbackpitch, cleanlevel, distortionlevel, amp, squish [, pan, deleteflag])
+    char *scoreTemplate = { "\
+        numNotes = %d \n\
+        noteDur = %f \n\
+        compression = %f \n\
+        pitch = %f \n\
+        distortionPitch = %f \n\
+        for (i = 0; i < numNotes; i = i + 1) { \n\
+            START1(i * (noteDur - compression), noteDur, pitch + random() * 0.05, 1, 1, 7, 0.04, distortionPitch, 0, 1, 10000, 2) \n\
+        } \
+    "};
+    
+    char score[2048];
+    sprintf(score, scoreTemplate, numNotes, noteDur, compression, pitch, distortionPitch);
     parse_score(score, strlen(score));
 }

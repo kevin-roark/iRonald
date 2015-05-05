@@ -41,6 +41,7 @@ class ofApp : public ofxiOSApp {
         void addGVerb(float dur);
         void parseRTInput(char *filename);
         void doChorus(char *samplename, float indur, int nvoices, float outdur, float trans, float amp);
+        void strum(int x, int y);
 
     // 3D model stuff
     ofxAssimpModelLoader ronaldModel;
@@ -60,6 +61,9 @@ class ofApp : public ofxiOSApp {
 
     unsigned long frameCount;
     unsigned long lastChoralFrame;
+    
+    bool guitarMode;
+    unsigned long stopDancingFrame;
     
     // BGG audio stuff
     void audioRequested(float * output, int bufferSize, int nChannels);
