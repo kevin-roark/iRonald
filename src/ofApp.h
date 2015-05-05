@@ -38,6 +38,7 @@ class ofApp : public ofxiOSApp {
         void updateRonaldAppearance();
     
         void oinkChorus(int touchX, int touchY);
+        void addGVerb(float dur);
         void parseRTInput(char *filename);
         void doChorus(char *samplename, float indur, int nvoices, float outdur, float trans, float amp);
 

@@ -85,7 +85,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(0, 0, 0, 255);
+    ofBackground(195, 195, 195, 255);
     ofSetColor(255, currentGB, currentGB, 255);
     
     if (isTouchDown) {
@@ -154,6 +154,10 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
 //--------------------------------------------------------------
 void ofApp::touchUp(ofTouchEventArgs & touch){
     isTouchDown = false;
+    
+    float percent = (currentTouchesDown / (float)MAX_TOUCH_COUNT);
+    float dur = percent * 12 + 5;
+    addGVerb(dur);
 }
 
 //--------------------------------------------------------------
@@ -287,6 +291,16 @@ void ofApp::doChorus(char *samplename, float indur, int nvoices, float outdur, f
     
     char score[4096];
     sprintf(score, scoreTemplate,outdur, indur, trans, nvoices, amp);
+    
+    parse_score(score, strlen(score));
+}
+
+void ofApp::addGVerb(float dur) {
+    // GVERB(outsk, insk, dur, AMP, ROOMSIZE, RVBTIME, DAMPING, BANDWIDTH, DRYLEVEL, EARLYREFLECT, RVBTAIL, RINGDOWN[, INCHAN])
+    char *scoreTemplate = "GVERB(0, 0, %f, 0.5, 150.0, 10.0, 0.71, 0.34, -10.0, -11.0, -9.0, 7.0)";
+    
+    char score[1024];
+    sprintf(score, scoreTemplate, dur);
     
     parse_score(score, strlen(score));
 }
